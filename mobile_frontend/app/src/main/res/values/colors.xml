@@ -1,0 +1,10 @@
+<resources>
+    <color name="primaryColor">#6200EE</color>
+    <color name="secondaryColor">#03DAC6</color>
+    <color name="accentColor">#FF0266</color>
+    <color name="backgroundLight">#FFFFFFFF</color>
+    <color name="surfaceLight">#FAFAFA</color>
+    <color name="textPrimary">#212121</color>
+    <color name="textSecondary">#757575</color>
+    <color name="divider">#E0E0E0</color>
+</resources>

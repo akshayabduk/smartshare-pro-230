@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">SmartShare</string>
+    <string name="sign_in">Sign in</string>
+    <string name="sign_out">Sign out</string>
+    <string name="continue_label">Continue</string>
+    <string name="tab_dashboard">Dashboard</string>
+    <string name="tab_files">Files</string>
+    <string name="tab_transfers">Transfers</string>
+    <string name="quick_share">Quick Share</string>
+    <string name="connect_cloud">Connect Cloud</string>
+    <string name="google_drive">Google Drive</string>
+    <string name="dropbox">Dropbox</string>
+</resources>

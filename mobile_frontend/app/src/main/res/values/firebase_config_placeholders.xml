@@ -1,0 +1,7 @@
+<resources>
+    <!-- PUBLIC_INTERFACE
+         default_web_client_id must be provided by google-services.json.
+         Define a fallback empty string to allow compile; CI will replace via google-services plugin.
+     -->
+    <string name="default_web_client_id" translatable="false"></string>
+</resources>
