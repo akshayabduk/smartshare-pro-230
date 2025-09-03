@@ -64,7 +64,12 @@ class DashboardFragment : Fragment() {
         val row = LinearLayout(requireContext()).apply {
             orientation = LinearLayout.HORIZONTAL
         }
-        row.addView(makePill("Share", R.color.accentColor))
+        val sharePill = makePill("Share", R.color.accentColor)
+        sharePill.setOnClickListener {
+            // Open system picker; FilesFragment handles routing
+            com.smartshare.app.ui.files.FilesFragment.startSystemPickerForShare(requireActivity())
+        }
+        row.addView(sharePill)
         row.addView(makePill(getString(R.string.connect_cloud), R.color.secondaryColor))
         container.addView(row)
     }

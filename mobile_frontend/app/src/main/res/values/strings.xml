@@ -10,4 +10,16 @@
     <string name="connect_cloud">Connect Cloud</string>
     <string name="google_drive">Google Drive</string>
     <string name="dropbox">Dropbox</string>
+
+    <!-- New strings -->
+    <string name="share_via">Share via</string>
+    <string name="bluetooth">Bluetooth</string>
+    <string name="wifi_direct">Wi‑Fi Direct</string>
+    <string name="cloud_services">Cloud services</string>
+    <string name="permission_required">Permission required</string>
+    <string name="bt_disabled">Bluetooth is disabled</string>
+    <string name="wifi_p2p_not_supported">Wi‑Fi Direct not supported on this device</string>
+    <string name="discovering">Discovering…</string>
+    <string name="select_device">Select a device</string>
+    <string name="no_devices_found">No devices found yet</string>
 </resources>

@@ -9,6 +9,9 @@ Features:
 - Cloud storage integration (Google Drive, Dropbox) via REST (placeholders).
 - File preview and management (basic image preview).
 - Real-time transfer status with LiveData.
+- Direct device-to-device sharing:
+  - Bluetooth Classic (RFCOMM) client with bonded device selection.
+  - Wi‑Fi Direct (P2P) discovery and connection with in-app chooser.
 - Modern, minimal, light UI with primary #6200EE, secondary #03DAC6, accent #FF0266.
 
 Prerequisites:
@@ -30,6 +33,11 @@ Configuration:
 - Ensure string resource default_web_client_id is supplied by google-services.json
 - For Drive/Dropbox: add access tokens via your backend or secure OAuth flow (not included in this sample). Update the domain/rest clients in the app for production.
 
-Notes:
-- Transfers are simulated in this stub. Replace simulateTransfer() in TransferManager with actual transport.
+Direct Sharing Notes:
+- Bluetooth: requires a server app running on the receiving device using the same UUID to accept RFCOMM connections. Pair devices in system settings first.
+- Wi‑Fi Direct: the receiving peer must run a server socket on port 8988; this client connects to the group owner’s address after connection.
+- Runtime permissions are requested on demand (BLUETOOTH_* / NEARBY_WIFI_DEVICES or ACCESS_FINE_LOCATION depending on Android version).
+- This is a reference implementation for discovery/connection and client-side send; production apps should implement robust negotiation, resume, integrity checks, and receiver UI.
+
+AI Notes:
 - AI categorization uses heuristics; integrate on-device ML as needed.

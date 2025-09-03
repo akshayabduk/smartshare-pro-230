@@ -10,6 +10,7 @@ import android.view.*
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.smartshare.app.domain.model.FileItem
 import com.smartshare.app.R
 import com.smartshare.app.domain.share.TransferManager
+import com.smartshare.app.domain.share.transport.PermissionHelper
 import com.smartshare.app.ui.preview.PreviewActivity
 
 /**
@@ -41,10 +43,11 @@ class FilesFragment : Fragment() {
     }
 
     private lateinit var recyclerView: RecyclerView
+    private val permissionHelper by lazy { PermissionHelper(this) }
+
     private val adapter = FileListAdapter { item, action ->
         when (action) {
-            FileItemAction.SHARE -> TransferManager.getInstance(requireContext())
-                .enqueueShare(item)
+            FileItemAction.SHARE -> showShareChooser(item)
             FileItemAction.PREVIEW -> startActivity(
                 Intent(requireContext(), PreviewActivity::class.java).putExtra("uri", item.uri.toString())
             )
@@ -54,7 +57,7 @@ class FilesFragment : Fragment() {
     private val pickerLauncher = registerForActivityResult(ActivityResultContracts.OpenMultipleDocuments()) { uris ->
         uris?.forEach { uri ->
             val item = uri.toFileItem(requireContext())
-            TransferManager.getInstance(requireContext()).enqueueShare(item)
+            showShareChooser(item)
         }
     }
 
@@ -74,6 +77,43 @@ class FilesFragment : Fragment() {
         root.addView(recyclerView)
         loadSample()
         return root
+    }
+
+    private fun showShareChooser(item: FileItem) {
+        val options = arrayOf(
+            getString(R.string.bluetooth),
+            getString(R.string.wifi_direct),
+            getString(R.string.cloud_services)
+        )
+        AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.share_via))
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> requestBluetoothAndSend(item)
+                    1 -> requestWifiAndSend(item)
+                    2 -> TransferManager.getInstance(requireContext()).enqueueShare(item) // simulated cloud
+                }
+            }.show()
+    }
+
+    private fun requestBluetoothAndSend(item: FileItem) {
+        permissionHelper.requestBluetoothPermissions(requireActivity()) { granted ->
+            if (granted) {
+                TransferManager.getInstance(requireContext()).enqueueDirectShare(requireActivity(), item, "bluetooth")
+            } else {
+                android.widget.Toast.makeText(requireContext(), getString(R.string.permission_required), android.widget.Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun requestWifiAndSend(item: FileItem) {
+        permissionHelper.requestWifiDirectPermissions(requireActivity()) { granted ->
+            if (granted) {
+                TransferManager.getInstance(requireContext()).enqueueDirectShare(requireActivity(), item, "wifi")
+            } else {
+                android.widget.Toast.makeText(requireContext(), getString(R.string.permission_required), android.widget.Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun loadSample() {
