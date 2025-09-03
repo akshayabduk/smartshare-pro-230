@@ -32,9 +32,15 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Redirect to auth if not signed-in.
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        if (currentUser == null) {
+        // Redirect to auth if not signed-in. If Firebase is unavailable, continue without forcing auth.
+        val shouldRequireAuth = try {
+            val user = FirebaseAuth.getInstance().currentUser
+            user == null
+        } catch (t: Throwable) {
+            android.util.Log.w("MainActivity", "FirebaseAuth unavailable: ${t.message}")
+            false
+        }
+        if (shouldRequireAuth) {
             startActivity(Intent(this, AuthActivity::class.java))
             finish()
             return

@@ -55,11 +55,18 @@ class AuthActivity : AppCompatActivity() {
     }
 
     private fun startAuthFlow() {
+        // If google-services.json isn't configured, default_web_client_id will be blank.
+        val clientId = getString(R.string.default_web_client_id)
+        if (clientId.isNullOrBlank()) {
+            Toast.makeText(this, "Google Sign-In is not configured. Please add google-services.json.", Toast.LENGTH_LONG).show()
+            return
+        }
+
         val request = BeginSignInRequest.builder()
             .setGoogleIdTokenRequestOptions(
                 BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
                     .setSupported(true)
-                    .setServerClientId(getString(R.string.default_web_client_id))
+                    .setServerClientId(clientId)
                     .setFilterByAuthorizedAccounts(false)
                     .build()
             )
